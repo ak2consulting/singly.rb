@@ -1,5 +1,5 @@
 require "singly/version"
+require "singly/api_request"
 
 module Singly
-  # Your code goes here...
 end
