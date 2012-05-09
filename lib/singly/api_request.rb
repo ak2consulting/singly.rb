@@ -13,9 +13,14 @@ module Singly
       API_PROTOCOL + api_base + path
     end
 
-    def get(path, options={})
-      options = options.merge(:access_token => @access_token) if @access_token
-      HTTParty.get(api_url(path), {:query => options})
+    def get(path, query={})
+      url = api_url(path)
+      query = query.merge(:access_token => @access_token) if @access_token
+      options = {}
+      options[:query] = query if query.any?
+      http = HTTParty.get(url, options)
+      return JSON.parse(http.body) if http.success?
+      raise Net::HTTPError.new(http.response.message, http.response)
     end
   end
 end

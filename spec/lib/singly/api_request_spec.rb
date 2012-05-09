@@ -1,5 +1,8 @@
 require "spec_helper"
 
+TEST_URL = "https://api.singly.com/test"
+TEST_SUCCESS = {"OK" => true}.to_json
+
 describe Singly::ApiRequest do
   include Singly::ApiRequest
 
@@ -33,15 +36,15 @@ describe Singly::ApiRequest do
 
   describe "#get" do
     it "hits the correct endpoint" do
-      HTTParty.should_receive(:get).
-        with("https://api.singly.com/test", anything)
-      get("/test")
+      stub_request(:get, "https://api.singly.com/test").
+        to_return({:body => TEST_SUCCESS})
+      get("/test")['OK'].should be_true
     end
 
     it "passes through query parameters" do
-      HTTParty.should_receive(:get).
-        with(anything, {:query => {:foo => :bar}})
-      get("/test", :foo => :bar)
+      stub_request(:get, "https://api.singly.com/test?foo=bar").
+        to_return({:body => TEST_SUCCESS})
+      get("/test", :foo => :bar)['OK'].should be_true
     end
 
     context "when @access_token is available" do
@@ -50,16 +53,44 @@ describe Singly::ApiRequest do
       end
 
       it "adds the access_token to the parameters" do
-        HTTParty.should_receive(:get).
-          with(anything, {:query => {:access_token => @access_token}})
-        get('/test')
+        stub_request(:get, "https://api.singly.com/test?access_token=mytoken").
+          to_return({:body => TEST_SUCCESS})
+        get('/test')['OK'].should be_true
       end
     end
 
     context "when @access_token is not defined" do
       it "leaves it out" do
-        HTTParty.should_receive(:get).with(anything, {:query => {}})
-        get('/test')
+        stub_request(:get, "https://api.singly.com/test").
+          to_return({:body => TEST_SUCCESS})
+        get('/test')['OK'].should be_true
+      end
+    end
+
+    context "when the response is successful" do
+      before do
+        stub_request(:get, "https://api.singly.com/test").to_return({
+          :status => 200,
+          :body => {"foo" => "bar"}.to_json
+        })
+      end
+
+      it "parses the body as JSON" do
+        get("/test").should == {"foo" => "bar"}
+      end
+    end
+
+    context "when the response is unsuccessful" do
+      before do
+        stub_request(:get, "https://api.singly.com/test").to_return({
+          :status => 401
+        })
+      end
+
+      it "raises the Net::HTTPResponse exception" do
+        lambda {
+          get("/test")
+        }.should raise_error(Net::HTTPError)
       end
     end
   end
