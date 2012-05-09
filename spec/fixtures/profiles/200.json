@@ -1,0 +1,9 @@
+{
+  "id": "myid",
+  "all": [
+    "123@twitter",
+    "456@facebook"
+  ],
+  "twitter": "123",
+  "facebook": "456"
+}

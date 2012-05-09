@@ -1,7 +1,7 @@
 require "httparty"
 
 module Singly
-  API_BASE = 'api.singly.com'
+  API_BASE = "api.singly.com"
   API_PROTOCOL = "https://"
 
   module ApiRequest
