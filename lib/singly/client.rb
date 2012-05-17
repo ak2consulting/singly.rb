@@ -11,5 +11,13 @@ module Singly
     def profiles
       get("/profiles")
     end
+
+    def foursquare
+      @foursquare ||= Singly::Service::Foursquare.new(self)
+    end
+
+    def instagram
+      @instagram ||= Singly::Service::Instagram.new(self)
+    end
   end
 end
