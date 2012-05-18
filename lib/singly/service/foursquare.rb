@@ -3,6 +3,9 @@ module Singly
     def checkins(query={})
       get('/checkins', query)
     end
+
+    def recent(query={})
+      get('/recent', query)
     end
   end
 end
