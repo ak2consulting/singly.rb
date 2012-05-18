@@ -5,8 +5,8 @@ class Singly::Service
     @client = client
   end
 
-  def get(path)
-    client.get("/services/#{service_name}#{path}")
+  def get(path, query={})
+    client.get("/services/#{service_name}#{path}", query)
   end
 
   def service_name

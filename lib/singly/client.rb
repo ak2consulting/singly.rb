@@ -8,8 +8,8 @@ module Singly
       @access_token = access_token
     end
 
-    def profiles
-      get("/profiles")
+    def profiles(query={})
+      get("/profiles", query)
     end
 
     def foursquare

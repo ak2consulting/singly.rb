@@ -1,11 +1,11 @@
 module Singly
   class Service::Instagram < Service
-    def feed
-      get('/feed')
+    def feed(query={})
+      get('/feed', query)
     end
 
-    def media
-      get('/media')
+    def media(query={})
+      get('/media', query)
     end
   end
 end

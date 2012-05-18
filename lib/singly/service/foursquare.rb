@@ -1,7 +1,8 @@
 module Singly
   class Service::Foursquare < Service
-    def checkins
-      get('/checkins')
+    def checkins(query={})
+      get('/checkins', query)
+    end
     end
   end
 end
